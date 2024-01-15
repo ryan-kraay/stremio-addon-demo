@@ -4,10 +4,23 @@ version: 0.1.0
 authors:
   - Ryan Kraay <6840071+ryan-kraay@users.noreply.github.com>
 
+crystal: '>= 1.11.1'
+
+license: MIT
+
 targets:
   stremio-addon-demo:
     main: src/stremio-addon-demo.cr
 
-crystal: '>= 1.11.1'
+dependencies:
+  stremio-addon-devkit:
+    github: ryan-kraay/stremio-addon-devkit
+    branch: main
+  kemal:
+    github: kemalcr/kemal
+    version: ~> 1.4.0
 
-license: MIT
+development_dependencies:
+  spec-kemal:
+    github: kemalcr/spec-kemal
+    version: ~> 1.0.0
