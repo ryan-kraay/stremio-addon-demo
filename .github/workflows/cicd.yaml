@@ -1,0 +1,24 @@
+name: CICD
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        crystal: [1.11.1]  # This needs to be kept in sync with /shards.yml  # TODO include "latest" once this is more mature
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download source
+        uses: actions/checkout@v3
+      - name: Install Crystal ${{ matrix.crystal }}
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal }}
+          shards: false
+      - name: Check Formatting
+        run: crystal tool format --check
+      - name: Install Railway CLI
+        run: curl -fsSL https://railway.app/install.sh | sh
+      - name: Deploy to Railway
+        run: railway up --help
+
