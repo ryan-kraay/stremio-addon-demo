@@ -18,9 +18,9 @@ manifest = DevKit::Conf::Manifest.build(
   description: "A demo powered by https://github.com/ryan-kraay/stremio-addon-devkit",
   version: "0.0.1") do |conf|
   conf.catalogs << DevKit::Conf::Catalog.new(
-      type: DevKit::Conf::ContentType::Movie,
-      id: "movies4u",
-      name: "Movies for you")
+    type: DevKit::Conf::ContentType::Movie,
+    id: "movies4u",
+    name: "Movies for you")
 end
 
 # Now we create a router, this will allow us to assign
@@ -32,15 +32,15 @@ add_handler router
 
 # This is our callback, it will be executed for each request
 def catalog_movies(env, addon)
-#def catalog_movies(env : HTTP::Server::Context,addon : DevKit::Api::CatalogMovieRequest) : DevKit::Api::CatalogMovieResponse?
+  # def catalog_movies(env : HTTP::Server::Context,addon : DevKit::Api::CatalogMovieRequest) : DevKit::Api::CatalogMovieResponse?
   # TODO:  Add your code here
   DevKit::Api::CatalogMovieResponse.build do |catalog|
     catalog.metas << DevKit::Api::CatalogMovieResponse::Meta.new(
-        type: DevKit::Conf::ContentType::Movie,
-        id: "tt0032138",
-        name: "The Wizard of Oz",
-        poster: URI.parse("https://images.metahub.space/poster/medium/tt0032138/img")
-        )
+      type: DevKit::Conf::ContentType::Movie,
+      id: "tt0032138",
+      name: "The Wizard of Oz",
+      poster: URI.parse("https://images.metahub.space/poster/medium/tt0032138/img")
+    )
   end
 end
 
@@ -48,7 +48,7 @@ end
 # (there are many ways to do this)
 router.bind(manifest) do |callback|
   callback.catalog_movie &->catalog_movies(HTTP::Server::Context, DevKit::Api::CatalogMovieRequest)
-  #callback.catalog_movie &->catalog_movies
+  # callback.catalog_movie &->catalog_movies
 end
 
 # Useful for health checks
@@ -99,5 +99,5 @@ Kemal.config.logger = AppLogHandler.new
 # should use
 Kemal.config.port = ENV.fetch("PORT", "8080").to_i
 # Disable serving static content
-Kemal.config.serve_static=false
+Kemal.config.serve_static = false
 Kemal.run
