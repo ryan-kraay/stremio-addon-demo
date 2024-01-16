@@ -21,7 +21,7 @@ COPY . .
 
 # Build and Test the application
 RUN du -ah . | grep -v lib/ && \
-    crystal spec && \
+    KEMAL_ENV=test crystal spec && \
     shards build --production --release --error-trace --static && \
     strip ./bin/* && \
     ls -lh ./bin/ && \

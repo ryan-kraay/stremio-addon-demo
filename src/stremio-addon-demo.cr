@@ -1,4 +1,5 @@
 require "kemal"
+require "log"
 require "stremio-addon-devkit/api/manifest_handler"
 require "stremio-addon-devkit/conf"
 
@@ -55,7 +56,48 @@ get "/alive" do
   "yes"
 end
 
-# Render.io and other platforms use PORT to decide what port the application
+# we're just a simple application
+get "/robots.txt" do |env|
+  env.response.content_type = "text/plain; charset=utf-8"
+  <<-'EOL'
+User-Agent: *
+Disallow: /
+
+EOL
+end
+
+error 404 do |env|
+  # The original kemal error pages are a bit bulky/noisy (personal preference)
+  env.response.content_type = "text/plain; charset=utf-8"
+  "404 - Not Found"
+end
+
+# taken from: https://aravindavk.in/blog/using-http-log-handler-kemal/
+# implementation for LogHandler: https://github.com/crystal-lang/crystal/blob/7aa5cdd86/src/http/server/handlers/log_handler.cr#L13
+#   it would be possible to include apache-style access logs
+class AppLogHandler < Kemal::BaseLogHandler
+  def initialize
+    @handler = HTTP::LogHandler.new
+  end
+
+  def call(context : HTTP::Server::Context)
+    @handler.next = @next
+    @handler.call(context)
+  end
+
+  def write(message : String)
+    Log.info { message.strip }
+  end
+end
+
+Log.setup(
+  level: Log::Severity::Info
+)
+
+Kemal.config.logger = AppLogHandler.new
+# Render.io, Railway.app and other platforms use PORT to decide what port the application
 # should use
 Kemal.config.port = ENV.fetch("PORT", "8080").to_i
+# Disable serving static content
+Kemal.config.serve_static=false
 Kemal.run
