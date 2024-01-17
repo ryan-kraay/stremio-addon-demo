@@ -1,6 +1,6 @@
 *
-!spec
-!src
+!spec/*
+!src/*
 !shard.lock
 !shard.yml
 !Dockerfile
