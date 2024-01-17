@@ -12,7 +12,7 @@ on:
       - "**:**"
 
 jobs:
-  test:
+  deploy:
     strategy:
       fail-fast: false
       matrix:
@@ -28,11 +28,19 @@ jobs:
           shards: false
       - name: Check Formatting
         run: crystal tool format --check
+      - name: Split branch name
+        # source: https://stackoverflow.com/questions/73402042/github-action-expressions-split-string
+        env:
+          BRANCH: ${{ github.ref_name }}
+        id: split
+        run: echo "::set-output name=fragment::${BRANCH##*/}"
       - name: Install Railway CLI
         run: curl -fsSL https://railway.app/install.sh | sh
       - name: Deploy to Railway
+        #if: github.ref == 'refs/heads/main' || 'refs/heads/staging'
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE_NAME: ${{ vars.RAILWAY_SERVICE_NAME }}
-        run: railway up --service="$RAILWAY_SERVICE_NAME" -d
+          ENVIRONMENT: ${{ steps.split.outputs.fragment }}
+        run: railway up --service="$RAILWAY_SERVICE_NAME" --environment="$ENVIRONMENT" -d
 
