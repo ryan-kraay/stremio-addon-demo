@@ -31,7 +31,7 @@ jobs:
       - name: Split branch name
         # source: https://stackoverflow.com/questions/73402042/github-action-expressions-split-string
         env:
-          BRANCH: ${{ github.ref_name }}
+          BRANCH: ${{ github.ref }}
         id: split
         run: echo "fragment=${BRANCH##*/}" >> "$GITHUB_ENV"
       - name: Install Railway CLI
