@@ -41,6 +41,6 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE_NAME: ${{ vars.RAILWAY_SERVICE_NAME }}
-          ENVIRONMENT: ${{ steps.split.outputs.fragment }}
+          ENVIRONMENT: ${{ env.fragement }}
         run: railway up --service="$RAILWAY_SERVICE_NAME" --environment="$ENVIRONMENT" -d
 
