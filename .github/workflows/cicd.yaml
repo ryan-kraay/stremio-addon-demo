@@ -12,7 +12,7 @@ on:
       - "**:**"
 
 jobs:
-  deploy:
+  stremio-addon-demo:
     strategy:
       fail-fast: false
       matrix:
@@ -33,7 +33,7 @@ jobs:
         env:
           BRANCH: ${{ github.ref_name }}
         id: split
-        run: echo "::set-output name=fragment::${BRANCH##*/}"
+        run: echo "fragment=${BRANCH##*/}" >> "$GITHUB_ENV"
       - name: Install Railway CLI
         run: curl -fsSL https://railway.app/install.sh | sh
       - name: Deploy to Railway
