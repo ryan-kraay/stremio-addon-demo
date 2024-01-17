@@ -37,7 +37,7 @@ jobs:
       - name: Install Railway CLI
         run: curl -fsSL https://railway.app/install.sh | sh
       - name: Deploy to Railway
-        #if: github.ref == 'refs/heads/main' || 'refs/heads/staging'
+        if: github.ref == 'refs/heads/main' || 'refs/heads/stable'
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE_NAME: ${{ vars.RAILWAY_SERVICE_NAME }}
