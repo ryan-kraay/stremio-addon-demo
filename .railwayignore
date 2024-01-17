@@ -1,6 +1,8 @@
 *
 !spec
+!spec/*.cr
 !src
+!src/*.cr
 !shard.lock
 !shard.yml
 !Dockerfile
