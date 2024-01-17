@@ -1,0 +1,10 @@
+*
+!spec
+!src
+!shard.lock
+!shard.yml
+!Dockerfile
+!.dockerignore
+!.railwayignore
+# This file is shared between docker and railway
+# See: https://github.com/railwayapp/cli/blob/68db247b67863e7d426d776ec516b0bb2cd1b8ac/src/commands/up.rs#L175

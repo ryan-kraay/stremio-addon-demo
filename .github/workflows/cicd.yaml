@@ -1,0 +1,45 @@
+name: CICD
+
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+    branches:
+      - "**"
+
+  pull_request:
+    branches:
+      - "**:**"
+
+jobs:
+  stremio-addon-demo:
+    strategy:
+      fail-fast: false
+      matrix:
+        crystal: [1.11.1]  # This needs to be kept in sync with /shards.yml  # TODO include "latest" once this is more mature
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download source
+        uses: actions/checkout@v3
+      - name: Install Crystal ${{ matrix.crystal }}
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal }}
+          shards: false
+      - name: Check Formatting
+        run: crystal tool format --check
+      - name: Split branch name
+        # source: https://stackoverflow.com/questions/73402042/github-action-expressions-split-string
+        env:
+          BRANCH_REF: ${{ github.ref }}
+        id: split
+        run: echo "BRANCH_NAME=${BRANCH_REF##*/}" >> "$GITHUB_ENV"
+      - name: Install Railway CLI
+        run: curl -fsSL https://railway.app/install.sh | sh
+      - name: Deploy to Railway
+        if: github.ref == 'refs/heads/main' || 'refs/heads/stable'
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE_NAME: ${{ vars.RAILWAY_SERVICE_NAME }}
+        run: railway up --service="$RAILWAY_SERVICE_NAME" --environment="$BRANCH_NAME" -d
+

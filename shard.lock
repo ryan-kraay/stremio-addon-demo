@@ -1,0 +1,38 @@
+version: 2.0
+shards:
+  backtracer:
+    git: https://github.com/sija/backtracer.cr.git
+    version: 1.2.2
+
+  bitfields:
+    git: https://github.com/elorest/bitfields.git
+    version: 1.2.1
+
+  exception_page:
+    git: https://github.com/crystal-loot/exception_page.git
+    version: 0.3.1
+
+  json-serializable-fake:
+    git: https://github.com/ryan-kraay/json-serializable-fake.git
+    version: 0.0.1+git.commit.5994ae6309f6eebbc72883ac0fb26b2ad9730871
+
+  kemal:
+    git: https://github.com/kemalcr/kemal.git
+    version: 1.4.0
+
+  lz4:
+    git: https://github.com/naqvis/lz4.cr.git
+    version: 1.0.0
+
+  radix:
+    git: https://github.com/luislavena/radix.git
+    version: 0.4.1
+
+  spec-kemal:
+    git: https://github.com/kemalcr/spec-kemal.git
+    version: 1.0.0
+
+  stremio-addon-devkit:
+    git: https://github.com/ryan-kraay/stremio-addon-devkit.git
+    version: 0.0.1+git.commit.1f6e7951df7e4c518abb417776dc0c6bb09d9821
+
