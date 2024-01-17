@@ -36,10 +36,16 @@ jobs:
         run: echo "BRANCH_NAME=${BRANCH_REF##*/}" >> "$GITHUB_ENV"
       - name: Install Railway CLI
         run: curl -fsSL https://railway.app/install.sh | sh
-      - name: Deploy to Railway
-        if: github.ref == 'refs/heads/main' || 'refs/heads/stable'
+      - name: Deploy to Railway Staging
+        if: github.ref == 'refs/heads/main'
         env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_TOKEN: ${{ secrets.MAIN_RAILWAY_TOKEN }}
+          RAILWAY_SERVICE_NAME: ${{ vars.RAILWAY_SERVICE_NAME }}
+        run: railway up --service="$RAILWAY_SERVICE_NAME" --environment="$BRANCH_NAME" -d
+      - name: Deploy to Railway Production
+        if: github.ref == 'refs/heads/stable'
+        env:
+          RAILWAY_TOKEN: ${{ secrets.STABLE_RAILWAY_TOKEN }}
           RAILWAY_SERVICE_NAME: ${{ vars.RAILWAY_SERVICE_NAME }}
         run: railway up --service="$RAILWAY_SERVICE_NAME" --environment="$BRANCH_NAME" -d
 
