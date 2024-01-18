@@ -34,6 +34,7 @@ add_handler router
 def catalog_movies(env, addon)
   # def catalog_movies(env : HTTP::Server::Context,addon : DevKit::Api::CatalogMovieRequest) : DevKit::Api::CatalogMovieResponse?
   # TODO:  Add your code here
+  Log.info { env.request.headers["user-agent"] }
   DevKit::Api::CatalogMovieResponse.build do |catalog|
     catalog.metas << DevKit::Api::CatalogMovieResponse::Meta.new(
       type: DevKit::Conf::ContentType::Movie,
