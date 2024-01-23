@@ -1,7 +1,6 @@
 require "kemal"
 require "log"
-require "stremio-addon-devkit/api/manifest_handler"
-require "stremio-addon-devkit/conf"
+require "stremio-addon-devkit"
 
 module Stremio::Addon::Demo
   VERSION = "0.1.0"
@@ -12,13 +11,12 @@ end
 alias DevKit = Stremio::Addon::DevKit
 
 # Construct a manifest to tell our client what features we support
-manifest = DevKit::Conf::Manifest.build(
+manifest = DevKit::Manifest.build(
   id: "io.github.ryan-kraay.stremio-addon-demo",
   name: "CrystalDemo",
   description: "A demo powered by https://github.com/ryan-kraay/stremio-addon-devkit",
   version: "0.0.1") do |conf|
-  conf.catalogs << DevKit::Conf::Catalog.new(
-    type: DevKit::Conf::ContentType::Movie,
+  conf << DevKit::CatalogMovie.new(
     id: "movies4u",
     name: "Movies for you")
 end
@@ -26,18 +24,18 @@ end
 # Now we create a router, this will allow us to assign
 # generated REST endpoint (defined in the manifest) with
 # callbacks
-router = DevKit::Api::ManifestHandler.new
+router = DevKit::ManifestHandler.new
 # Register the router with kemal
 add_handler router
 
 # This is our callback, it will be executed for each request
 def catalog_movies(env, addon)
-  # def catalog_movies(env : HTTP::Server::Context,addon : DevKit::Api::CatalogMovieRequest) : DevKit::Api::CatalogMovieResponse?
+  # def catalog_movies(env : HTTP::Server::Context,addon : DevKit::CatalogMovieRequest) : DevKit::CatalogMovieResponse?
   # TODO:  Add your code here
   Log.info { env.request.headers["user-agent"] }
-  DevKit::Api::CatalogMovieResponse.build do |catalog|
-    catalog.metas << DevKit::Api::CatalogMovieResponse::Meta.new(
-      type: DevKit::Conf::ContentType::Movie,
+  DevKit::CatalogMovieResponse.build do |catalog|
+    catalog.metas << DevKit::CatalogMovieResponse::Meta.new(
+      type: DevKit::ContentType::Movie,
       id: "tt0032138",
       name: "The Wizard of Oz",
       poster: URI.parse("https://images.metahub.space/poster/medium/tt0032138/img")
@@ -48,7 +46,7 @@ end
 # Bind our manifest to a series of callback
 # (there are many ways to do this)
 router.bind(manifest) do |callback|
-  callback.catalog_movie &->catalog_movies(HTTP::Server::Context, DevKit::Api::CatalogMovieRequest)
+  callback.catalog_movie &->catalog_movies(HTTP::Server::Context, DevKit::CatalogMovieRequest)
   # callback.catalog_movie &->catalog_movies
 end
 
