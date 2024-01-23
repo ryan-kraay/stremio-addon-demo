@@ -34,5 +34,5 @@ shards:
 
   stremio-addon-devkit:
     git: https://github.com/ryan-kraay/stremio-addon-devkit.git
-    version: 0.0.1+git.commit.1f6e7951df7e4c518abb417776dc0c6bb09d9821
+    version: 0.0.1+git.commit.51a73c457bac10e912719c828ee647f1af7cac73
 
